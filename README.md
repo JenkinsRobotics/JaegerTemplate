@@ -141,3 +141,13 @@ check (see `CONVENTIONS.md` → "The connection rule").
 ## License
 
 [Apache-2.0](LICENSE) © Jenkins Robotics
+
+## Standalone use
+
+Every module runs by itself — no agent, no app:
+
+    python -m {{package_name}} --smoke
+
+See `__main__.py` (from the `.example`). Inputs/outputs are declared in
+`module.yaml` (`consumes`/`produces` topics, `tools`, `requires_*`) — the
+slot contract IS the interface.
