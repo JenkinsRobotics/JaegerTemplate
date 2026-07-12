@@ -15,8 +15,8 @@
 
 > ## Replace-these checklist (delete this block once done)
 >
-> - [ ] `{{REPO_NAME}}` — every occurrence, this file + `gh-pages/index.html` + `pyproject.toml.example`
-> - [ ] `{{DESCRIPTION}}` — one-line description, this file + `gh-pages/index.html`
+> - [ ] `{{REPO_NAME}}` — every occurrence, this file + `docs/index.html` + `pyproject.toml.example`
+> - [ ] `{{DESCRIPTION}}` — one-line description, this file + `docs/index.html`
 > - [ ] `{{package_name}}` — the Python import name (snake_case) — rename the
 >       `{{package_name}}/` directory itself, and every path inside it
 > - [ ] Fill in `{{package_name}}/module.yaml` (drop the `.example`
@@ -24,7 +24,7 @@
 > - [ ] Pin a real JaegerOS version range in `pyproject.toml.example`
 >       (see [Ecosystem links](#ecosystem-links))
 > - [ ] Seed `dev/docs/reality/STATUS.md` with today's date and truth
-> - [ ] Enable GitHub Pages from `gh-pages/` (see `gh-pages/SITE.md`)
+> - [ ] Enable GitHub Pages from `docs/` (see `docs/SITE.md`)
 > - [ ] Pick a LICENSE (Apache-2.0 shipped by default — swap if this repo
 >       needs different terms)
 

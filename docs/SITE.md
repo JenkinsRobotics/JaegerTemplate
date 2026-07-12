@@ -1,4 +1,13 @@
-# gh-pages/ — the repo's GitHub Pages site
+# Deploying this site (the standard for ALL Jaeger repos)
+
+GitHub → Settings → Pages → Source: **Deploy from a branch** →
+Branch: `master`, Folder: **`/docs`** → Save. Live in ~1 minute at
+`https://jenkinsrobotics.github.io/<repo>/`.
+
+(The main JROS site uses the older gh-pages-branch method; module repos
+standardize on the /docs folder — site ships atomically with code.)
+
+# docs/ — the repo's GitHub Pages site
 
 `index.html` is cloned from [JROS-site](https://github.com/JenkinsRobotics/JROS)'s
 own marketing page — same CSS design system (palette, nav, hero,
@@ -10,13 +19,13 @@ site also uses (the Jenkins Robotics logo) — nothing to bundle.
 
 ## Enable GitHub Pages
 
-1. Push this repo with `gh-pages/index.html` in place.
+1. Push this repo with `docs/index.html` in place.
 2. On GitHub: **Settings → Pages → Build and deployment → Source:**
    `Deploy from a branch`.
 3. **Branch:** your default branch, **folder:** `/gh-pages` (GitHub only
-   offers `/` or `/docs` in the folder dropdown for a non-`gh-pages`-named
+   offers `/` or `/docs` in the folder dropdown for a non-`docs`-named
    branch — if `/gh-pages` isn't selectable, either rename this directory
-   to `docs/` or push its contents to a dedicated `gh-pages` branch at the
+   to `docs/` or push its contents to a dedicated `docs` branch at the
    repo root instead).
 4. Save. The site publishes at `https://JenkinsRobotics.github.io/{{REPO_NAME}}/`.
 
