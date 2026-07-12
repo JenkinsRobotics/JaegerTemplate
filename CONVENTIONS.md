@@ -36,7 +36,7 @@ building:
 - **Slots + `module.yaml` (Mind ↔ engine modules)** — a module directory
   declares a `slot`, its bus topics (`consumes`/`produces`), the tools it
   serves, its factory, and `requires_libraries`/`requires_platform`. This
-  is what `src/{{package_name}}/module.yaml.example` in this template is.
+  is what `{{package_name}}/module.yaml.example` in this template is.
 - **The NDJSON protocol (outside apps ↔ the Mind)** — one wire contract,
   many transports. Never pip-dissect the agent to embed it; speak the
   protocol instead.

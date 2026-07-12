@@ -37,7 +37,7 @@ where = ["src"]
 include = ["{{package_name}}*"]
 
 [tool.pytest.ini_options]
-testpaths = ["src/{{package_name}}/tests"]
+testpaths = ["{{package_name}}/tests"]
 
 [tool.ruff]
 line-length = 88

@@ -18,8 +18,8 @@
 > - [ ] `{{REPO_NAME}}` — every occurrence, this file + `gh-pages/index.html` + `pyproject.toml.example`
 > - [ ] `{{DESCRIPTION}}` — one-line description, this file + `gh-pages/index.html`
 > - [ ] `{{package_name}}` — the Python import name (snake_case) — rename the
->       `src/{{package_name}}/` directory itself, and every path inside it
-> - [ ] Fill in `src/{{package_name}}/module.yaml` (drop the `.example`
+>       `{{package_name}}/` directory itself, and every path inside it
+> - [ ] Fill in `{{package_name}}/module.yaml` (drop the `.example`
 >       suffix from every `*.example` file once real values are in)
 > - [ ] Pin a real JaegerOS version range in `pyproject.toml.example`
 >       (see [Ecosystem links](#ecosystem-links))
@@ -75,7 +75,7 @@ version range is declared.
 # Run this module's contract smoke test — proves module.yaml parses,
 # the factory builds a live node, and the bus contract round-trips —
 # all without touching real hardware or models.
-pytest src/{{package_name}}/tests
+pytest {{package_name}}/tests
 
 # Or run it directly:
 python -m {{package_name}}.tests.test_module_contract
@@ -93,7 +93,7 @@ follows, mirroring [`jaeger_os/nodes/kokoro_tts/`](https://github.com/JenkinsRob
 in JaegerOS itself:
 
 ```
-src/{{package_name}}/
+{{package_name}}/
 ├── __init__.py            ← exports the factory (module.yaml's `factory:` target)
 ├── module.yaml.example    ← the manifest: slot, topics, tools, requires_*
 ├── config.py.example      ← this module's settings-catalog schema slice
@@ -111,8 +111,8 @@ else in the repo should restate it.
 ## Development
 
 ```bash
-pytest src/{{package_name}}/tests    # module-contract smoke test
-ruff check src/                      # lint, if configured
+pytest {{package_name}}/tests    # module-contract smoke test
+ruff check                       # lint, if configured
 ```
 
 Follow [`CONVENTIONS.md`](CONVENTIONS.md) — especially: no doc describes

@@ -31,13 +31,13 @@ jobs:
           # pip install -e .[dev]   # uncomment once pyproject.toml is real
 
       - name: Lint
-        run: ruff check src/ || true   # drop `|| true` once the module has real code
+        run: ruff check  || true   # drop `|| true` once the module has real code
 
       - name: Module-contract smoke test
         run: |
           # Drop the `.example` suffixes (see README checklist) before
           # this actually collects anything — pytest ignores *.example.
-          pytest src/{{package_name}}/tests -v || true
+          pytest {{package_name}}/tests -v || true
 
       # ── NERVOUS-SYSTEM CHECK (placeholder) ──────────────────────────
       # For repos that carry BOTH a runtime/hardware layer and an
@@ -53,13 +53,13 @@ jobs:
       #     set -euo pipefail
       #     # runtime/hardware/ never imports agent/
       #     if grep -rlE '^\s*(import|from)\s+{{package_name}}\.agent' \
-      #         src/{{package_name}}/runtime src/{{package_name}}/hardware 2>/dev/null; then
+      #         {{package_name}}/runtime {{package_name}}/hardware 2>/dev/null; then
       #       echo "::error::runtime/hardware code imports the agent layer — nervous-system rule violated"
       #       exit 1
       #     fi
       #     # contract/ imports nothing project-local
       #     if grep -rlE '^\s*(import|from)\s+{{package_name}}\.' \
-      #         src/{{package_name}}/contract 2>/dev/null; then
+      #         {{package_name}}/contract 2>/dev/null; then
       #       echo "::error::contract/ imports project code — it must depend on nothing"
       #       exit 1
       #     fi
