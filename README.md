@@ -1,218 +1,143 @@
-## Jenkins Robotics
-# Project Template
+<h1 align="center">{{REPO_NAME}}</h1>
 
-<!-- This is commented out. -->
+<p align="center">
+  <em>{{DESCRIPTION}}</em>
+</p>
 
-## Project Information
+<p align="center">
+  <a href="https://github.com/JenkinsRobotics/{{REPO_NAME}}/releases"><img src="https://img.shields.io/badge/version-0.1.0-2EA44F?style=for-the-badge" alt="Version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-2EA44F?style=for-the-badge" alt="License"></a>
+  <img src="https://img.shields.io/badge/python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/JaegerOS-pinned-58A6FF?style=for-the-badge" alt="JaegerOS pinned">
+</p>
 
-Project Status : <mark style="background-color: green"> &nbsp; COMPLETED &nbsp;</mark>  
-Code Status : <mark style="background-color: green"> &nbsp; GOOD &nbsp;</mark>  
-Development Status : <mark style="background-color: red"> &nbsp; NOT ACTIVE &nbsp;</mark>  
+---
 
+> ## Replace-these checklist (delete this block once done)
+>
+> - [ ] `{{REPO_NAME}}` — every occurrence, this file + `gh-pages/index.html` + `pyproject.toml.example`
+> - [ ] `{{DESCRIPTION}}` — one-line description, this file + `gh-pages/index.html`
+> - [ ] `{{package_name}}` — the Python import name (snake_case) — rename the
+>       `src/{{package_name}}/` directory itself, and every path inside it
+> - [ ] Fill in `src/{{package_name}}/module.yaml` (drop the `.example`
+>       suffix from every `*.example` file once real values are in)
+> - [ ] Pin a real JaegerOS version range in `pyproject.toml.example`
+>       (see [Ecosystem links](#ecosystem-links))
+> - [ ] Seed `dev/docs/reality/STATUS.md` with today's date and truth
+> - [ ] Enable GitHub Pages from `gh-pages/` (see `gh-pages/SITE.md`)
+> - [ ] Pick a LICENSE (Apache-2.0 shipped by default — swap if this repo
+>       needs different terms)
 
+---
 
-&nbsp;
-## General Information
+## What it is
 
+`{{REPO_NAME}}` is a **{{DESCRIPTION}}** built on
+[JaegerOS](https://github.com/JenkinsRobotics/JaegerOS) — the framework
+layer of the Jaeger ecosystem (Bus · Node · modules/slots · supervisor ·
+safety · contract · capability layer). This repo doesn't fork or edit
+JaegerOS; it **pins** a release and builds on top of it, the same way a
+ROS package builds on ROS.
 
- This is a template README file designed to be adapted for your specific project. Replace this text with a brief overview of your project's purpose and goals.
-For example, you might describe the problem your project solves, its primary features, or its target audience. 
-- [x] Automated Tool Change
-- [x] Manual Tool Change
-- [x] Coolent 
-- [x] Tool Z Probe Macro
-- [x] Work Piece XYZ Probe
-- [x] Spindle Control
-- [x] Modularity
+Depending on what you're building here, this repo is one of:
 
-&nbsp;
-## WATCH NOW ON YOUTUBE
+- **An engine module** — a self-contained capability (`module.yaml` +
+  `config.py` + `node.py` + tests) that plugs into any JaegerOS project
+  through a **slot** (see [`jaeger_os/nodes/kokoro_tts/`](https://github.com/JenkinsRobotics/JaegerOS/tree/master/jaeger_os/nodes/kokoro_tts)
+  for the canonical shape this template mirrors).
+- **A hardware package** — a body's capability surface (motors, lights,
+  vision, …), registered through the capability layer.
+- **A project** — an assembled thing (a robot, an app, a desktop
+  companion) that pulls in JaegerOS + whichever modules it needs and owns
+  its own bringup (topology, config, instance).
 
+See [`CONVENTIONS.md`](CONVENTIONS.md) for the rules every repo in the
+ecosystem follows, and the tier map in
+[Ecosystem links](#ecosystem-links).
 
- Watch the project playlist on youtube. 
+## Install
 
- &nbsp;
-
-[![image alt text](http://img.youtube.com/vi/w-qWbZ5-IQw/0.jpg)](https://youtube.com/playlist?list=PLNTKXZ4hgP_jekZOWw05JcJtyseCdSsIV "YouTube")
-
-&nbsp;
-## Support
-
-Did this project help you? Consider supporting! 
-
-Consider Subscribing: https://bit.ly/2DgZyuq <br>
-Patreon ➔ https://www.patreon.com/JenkinsRobotics <br>
-Venmo ➔ https://venmo.com/u/JenkinsRobotics <br>
-
-
-
-&nbsp;
-## Table of Contents
-
-
-**[Project File Structure](#project-file-structure)**<br>
-**[Installation Instructions](#installation-instructions)**<br>
-**[Next Steps](#next-steps)**<br>
-**[Components](#components)**<br>
-**[Notes and Miscellaneous](#notes-and-miscellaneous)**<br>
-**[Links](#links)**<br>
-
-
-&nbsp;
-## Project File Structure
-
-The following is a breakdown of the different folders and the files contained in them:
-
-1. **FUSION 360 POST PROCESSOR**
-    - *JenkinsCNCReprap.cps*
-    A post processor is the link between the CAM system and your CNC machine. The Post Processor translated the CAM instruction including information like the toolpath data, the type of operation, and the desired spindle feeds/speeds into the language that a CNC machine understands (gcode). Despite the fact that the DUET 3 runs RepRap Firmware, the standard RepRap post processor do not work for CNC machining. Our Custom post processor is based on the default RepRap post processor but fixes the gcode syntax errors and adds many additional modular features. 
-    **Directions:**
-      - Uploading file to Fusion 360 Cloud Storage [Personal-cloud]
-        With-in Fusion 360 open the project navigation panel. Under Libraries select "Assets", then select folder "CAMPosts" (if no folder exist then create one.) Upload the custom Post Processor within this folder for cloud storage. 
-      - Create NC Program
-        After creating your CAD model select the "Manufacturing Tab" in Fusion 360. Complete the "Setup" process and the desired toolpaths. Create a new "NC Program".  Under "Post Configuration / Library" specify the location of the Post Processor File [personal-cloud recommended]. Under Post specify the desired file "Jenkins CNC RepRap". Adjust Post Properties if desired, then export gcode.  
-
-
-    
-    &nbsp;
-2. **GCODE**  
-   - *SDCARD*
-    This folder contains a copy of all they files located on our Duet 3 Motherboard SD Card. The system drive contains multiple subfolders each containing different gcode / system files. Before Copying/referencing our  custom files it is best to upgrade the stock firmware and system files. The official Duet 3 releases can be found on GitHub.  [RepRap Files](https://github.com/Duet3D "Duet3D").
-      
-   - *Macros*
-    The Macro folder contains all the additional system files needed for the Duet 3. Files are grouped by their function. 
-     **Directions:**
-        - Upload any of the desired files. Then review the files and make any necessary  adjustment to the position points and the probe/sensors numbers.  
-
-   - *Sys*
-    The System folder contains all the important system files needed for the Duet 3. Each file serves as important gcode files that configures the machine and provide necessary gcode for specific processes like tool changes. 
-        **Directions:**
-        - For AutoTool Change Upload the following files:  TFree, Tpost, Tpre, ToolZProbe        
-        - For manual tool Change Upload the following files:  manualtoolchange, ToolZProbe,
-
-
-
-    &nbsp;
-3. **GH Pages**
-    - Files used for Github Pages and readme text file. 
-
-
-  
-
-    &nbsp;
-4. **MANUALS**
-   - *Post Processor Training Guide*
-     - The reference file for fusion 360 post proccessor. Contains reference material for different hadware apart of the CNC. 
-    
-  
-      
-
-
-> Note: Updating the RepRap firmware should be done carefully. Uploading the updated ZIP file could erase custom gcode files. 
-
-
-&nbsp;
-## Installation Instructions
-
-Installation instructions can be found in the youtube video linked below 
- 
-
- ### Video link  be updated soon
-
-[![image alt text](http://img.youtube.com/vi/w-qWbZ5-IQw/0.jpg)](https://youtube.com/playlist?list=PLNTKXZ4hgP_jekZOWw05JcJtyseCdSsIV "YouTube")
-
-
-<!-- This is commented out.  
-
-The following is a breakdown of the different folders and the files contained in them:
-
-
-```
-cd utils
-node build.js
+```bash
+git clone https://github.com/JenkinsRobotics/{{REPO_NAME}}.git
+cd {{REPO_NAME}}
+python3 -m venv .venv && source .venv/bin/activate
+cp pyproject.toml.example pyproject.toml   # after filling in the pin — see checklist above
+pip install -e .
 ```
 
+This repo depends on a **pinned** `jaeger-os` release — it does not
+vendor or fork the framework. See `pyproject.toml.example` for where the
+version range is declared.
 
-Create a file with a `.zip` extension containing these files and directories:
+## Quick start
 
-```
-manifest.json
-common/
-chrome/
-```
+```bash
+# Run this module's contract smoke test — proves module.yaml parses,
+# the factory builds a live node, and the bus contract round-trips —
+# all without touching real hardware or models.
+pytest src/{{package_name}}/tests
 
-
-Create a file with a `.xpi` extension containing these files and directories:
-
-```
-chrome.manifest
-install.rdf
-common/
-firefox/
+# Or run it directly:
+python -m {{package_name}}.tests.test_module_contract
 ```
 
- This is commented out. -->
+Wire the module into a running JaegerOS instance by pointing its module
+discovery at this package (see JaegerOS's `jaeger_os/core/modules.py` for
+how `discover_modules()` walks module roots) — or, for a project-tier
+repo, declare it in your instance's manifest.
 
+## Module layout
 
-&nbsp;
-## Next Steps
+The canonical shape every module/hardware-package repo in the ecosystem
+follows, mirroring [`jaeger_os/nodes/kokoro_tts/`](https://github.com/JenkinsRobotics/JaegerOS/tree/master/jaeger_os/nodes/kokoro_tts)
+in JaegerOS itself:
 
-This project is now completed. No next steps are planned. We can release bug fixes if found. 
+```
+src/{{package_name}}/
+├── __init__.py            ← exports the factory (module.yaml's `factory:` target)
+├── module.yaml.example    ← the manifest: slot, topics, tools, requires_*
+├── config.py.example      ← this module's settings-catalog schema slice
+├── node.py.example        ← the four-phase Node (setup → tick → teardown → health)
+├── docs/                  ← this module's own design notes
+│   └── DESIGN.md.example
+└── tests/
+    └── test_module_contract.py.example   ← the module-contract smoke test
+```
 
-If you require assistant join our discord channel linked down below.
+One copy of every truth: the manifest (`module.yaml`) is the single
+source for what this module consumes, produces, and requires — nothing
+else in the repo should restate it.
 
+## Development
 
+```bash
+pytest src/{{package_name}}/tests    # module-contract smoke test
+ruff check src/                      # lint, if configured
+```
 
-&nbsp;
-## Components 
+Follow [`CONVENTIONS.md`](CONVENTIONS.md) — especially: no doc describes
+behavior the code doesn't implement yet (mark it `(planned)` instead),
+and `dev/docs/reality/STATUS.md` stays truthful — any commit that changes
+behavior updates it in the same commit.
 
-The following is a breakdown of key components for this project:
-&nbsp;
-| Item          | Function      | Cost  |
-| ------------- |:-------------:| -----:|
-| Fusion 360    | CAD           | Free |
-| VS Code       | Text Editor   |   Free |
+CI (`.github/workflows/ci.yml`) runs the test suite and, if this repo
+sits below the Mind in the dependency graph, the nervous-system dependency
+check (see `CONVENTIONS.md` → "The connection rule").
 
+## Ecosystem links
 
-&nbsp;
-## Notes and Miscellaneous
+- [JaegerOS](https://github.com/JenkinsRobotics/JaegerOS) — the framework
+  this repo pins (Bus · Node · modules/slots · supervisor · safety ·
+  contract · capability layer). You build on it; you don't edit it.
+- [Jaeger-AI](https://github.com/JenkinsRobotics/Jaeger-AI) — the turnkey
+  agentic product (the Mind): loop, tools, skills, memory, persona, local
+  inference, and its own faces (chat app, TUI, voice).
+- [JP01](https://github.com/JenkinsRobotics/JP01) — the reference
+  hardware Jaeger (the Body); the first repo to consume out-of-tree
+  modules and hardware packages the way this template scaffolds.
 
+---
 
-Disclaimer :
-Modifying your Shapeoko  will void the warranty. Do at your own risk.
+## License
 
-**ENJOY!!**
-
-That’s  all Folks. Hope this can help you in some way.
-... Consider Supporting Us Down Below. 
-
-&nbsp;
-## Links
-
-
-SUPPORT US ► 
-
-Consider Subscribing: https://www.youtube.com/@Jenkins_Robotics<br>
-Patreon ➔ https://www.patreon.com/JenkinsRobotics  <br>
-Venmo ➔ https://venmo.com/u/JenkinsRobotics <br>
-
-
-FOLLOW US ►
-
-Discord ➔ https://discord.gg/sAnE5pRVyT <br>
-Patreon ➔ https://www.patreon.com/JenkinsRobotics <br>
-Twitter ➔ https://twitter.com/j <br>
-Instagram  ➔ https://www.instagram.com/jenkinsrobotics/ <br>
-Facebook ➔ https://www.facebook.com/jenkinsrobotics/  <br>
-GitHub  ➔ https://jenkinsrobotics.github.io <br>
-
-
-
-
-
-
-
-
-
-
-
+[Apache-2.0](LICENSE) © Jenkins Robotics
