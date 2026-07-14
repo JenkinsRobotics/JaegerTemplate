@@ -26,6 +26,28 @@ slot: "{{slot_name}}"
 # rename that needs coordinated updates on the consuming side.
 version: 0.1.0
 
+# The ownership axis (TAXONOMY.md "Module KINDS") — orthogonal to slot:
+# slot says WHAT role this module fills, kind says WHAT IT'S ALLOWED TO
+# TOUCH. Four values:
+#   driver      owns ONE hardware device family, exclusively (device
+#               talk + its middleware + health + config). Exposes ONLY
+#               standardized topics. Swap the device = swap the module.
+#               Nothing outside a driver-kind module may open a device.
+#   processing  software-only, universal by construction — touches
+#               topics, never devices (e.g. a codec, an image op, a
+#               VAD).
+#   engine      fills a capability slot (tts, stt, ...) — the shipped
+#               pattern today (kokoro_tts, whisper_stt).
+#   mind        the agent itself — singleton, slot mind.
+# PLANNED FIELD: ModuleSpec (jaeger_os/contract/modules.py) does not
+# validate `kind` yet (forbid_unknown_fields=True) — setting this on a
+# REAL module.yaml today will fail strict discovery until the schema
+# ships it. Safe to fill in here as forward-looking documentation of
+# intent; do not copy it into a module.yaml this repo actually loads
+# until TAXONOMY.md's "Module KINDS" section says the schema shipped.
+kind: "{{kind}}"
+# kind: engine
+
 # Bus topics this module SUBSCRIBES to (the commands it acts on).
 # Empty list if this module only produces (e.g. a pure sensor).
 consumes: []

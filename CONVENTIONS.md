@@ -14,6 +14,11 @@ full reasoning; this file is the operating checklist.
    isolation). Don't split a boundary into a separate repo or a frozen
    interface until a *second real consumer* exists — boundaries drawn
    before two consumers are usually wrong boundaries.
+   **Units are part of the contract:** every contract-type field is SI,
+   with a unit-suffixed name (`_s`/`_ms`/`_m`/`_rad`/`_hz`/`_pct`) — no
+   bare numeric field ships without one (see the JaegerOS vault's
+   `Interfaces_And_Conventions.md` for the full convention and its one
+   known gap, `sample_rate`).
 
 2. **The nervous-system rule, enforced not promised.**
    Lower layers never wait on higher ones; higher layers cannot bypass

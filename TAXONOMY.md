@@ -103,6 +103,79 @@ coexist, ANY-OF readiness).
   `tests/test_module_contract.py.example` — this template's module-repo
   shape mirrors the real one field-for-field.
 
+### Module KINDS — the ownership axis
+
+**Question it answers:** "what is this module allowed to touch?" —
+orthogonal to slot. Slot answers *what role* a module fills (`tts`,
+`stt`, `vision`, …); kind answers *what it owns*. All four kinds below
+are still MODULE tier by the discovery/loading mechanism above — one
+`module.yaml`, one slot, one factory. Kind is a second, independent cut
+through the same tier, operator-ratified 2026-07-11.
+
+```
+DRIVER        owns ONE hardware device family, exclusively — device
+              talk + its middleware + health + config. Exposes ONLY
+              standardized topics. Swap the device = swap the module.
+
+PROCESSING    software-only, universal by construction — touches
+              topics, never devices.
+
+ENGINE        fills a capability slot (tts, stt, …) — the shipped
+              pattern today.
+
+MIND          the agent itself — singleton, slot mind.
+```
+
+- **DRIVER** — e.g. a `usb_camera` module publishing
+  `/sense/camera_frame`. Its whole job is standardizing the topic so
+  any camera in that family is interchangeable underneath it. The
+  rule this kind exists to enforce: **nothing outside a driver-kind
+  module may open a device.**
+- **PROCESSING** — e.g. a video codec module, an image-ops module
+  (resize/crop/color-convert), a VAD (voice-activity detector). Inputs
+  and outputs are both topics; it is portable to any driver that
+  produces the topic shape it expects. No shipped example exists yet
+  — the pattern is real and ratified, the first processing-kind module
+  is unbuilt.
+- **ENGINE** — `kokoro_tts` (`slot: tts`), `whisper_stt` (`slot: stt`).
+  Bundles engine code (a synthesis/recognition library) + a node,
+  bound to a slot. **Honest gap:** both shipped examples also touch
+  hardware directly inside their own node today (`kokoro_tts` owns the
+  speaker, `whisper_stt` owns the mic, both via the engine's own
+  library calls) — a driver/engine split would clean this up, but per
+  the second-consumer rule (this doc's own "role, not size" spirit,
+  restated in `CONVENTIONS.md`), that split is premature until a
+  second module actually needs the same raw device stream
+  independently.
+- **MIND** — the agent core. Today: in-repo `jaeger_os/agent/` code
+  with its own `module.yaml` at the root (0.9 step 3), not yet a
+  swappable implementation the way `kokoro_tts` is — see this doc's
+  DISTRIBUTION section and `examples/FRAMEWORK_GAPS.md` gap 5.
+
+**Worked example — lidar** (hypothetical; no lidar body exists in the
+ecosystem today):
+
+```
+lidar_driver module (kind: driver)
+  owns: device talk (serial/USB), link health, its own config
+  exposes: /sense/scan             ← the ONLY thing downstream sees
+                 │
+                 ▼
+slam_processing module (kind: processing)
+  subscribes /sense/scan, produces /sense/map
+  never touches a device — device-blind, portable to any lidar
+  hardware that also emits /sense/scan
+```
+
+**Status:** `kind` is **(planned)** as a validated field —
+`ModuleSpec` (`jaeger_os/contract/modules.py`) doesn't have it yet
+(`forbid_unknown_fields = True`; a real `module.yaml` that adds `kind:`
+today fails strict validation until the schema ships it). See
+`module.yaml.example`'s `kind:` field for the scaffold and its four
+enum values, and the JaegerOS vault's `Ownership_Model.md` /
+`Nodes_And_Modules.md` for the fuller ownership-rule writeup this
+section is the template-repo counterpart of.
+
 ### PACKAGE / WORKSPACE — the unit of assembly
 
 **Question it answers:** "what brings a specific BODY (or a specific
@@ -212,7 +285,7 @@ already have enough information to index, per `JAEGER_ECOSYSTEM.md`
 
 | Category | Tagged by | Examples today |
 |---|---|---|
-| **Modules** | slot | `tts` (kokoro_tts), `stt` (whisper_stt), `animation`, `media`, `messaging` (discord/telegram/imessage), `mind` (planned) |
+| **Modules** | slot (role) + kind (ownership, **planned** field) | `tts` (kokoro_tts, kind: engine), `stt` (whisper_stt, kind: engine), `animation`, `media`, `messaging` (discord/telegram/imessage), `mind` (planned) |
 | **Hardware Packages** | body archetype | `jp01` (desk-scale, 3 controllers); future: turret, arm, lidar-body |
 | **Apps** | connection mechanism + face | `swift` (protocol), `tui` (embedding), `pyside6` (embedding), `studio` (protocol, multi-instance manager) |
 | **Souls** | character/tone | the 14 shipped character packs (`anakin_skywalker`, `bender`, `glados`, `jarvis`, `lilith`, `mochi`, `tars`, …) |
