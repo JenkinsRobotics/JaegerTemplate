@@ -134,3 +134,21 @@ For 1.0 readiness, in rough order of how many examples each unblocks:
    additive once #3's rate story exists to hang it on.
 5. **#6, #7, #8** — real but narrower; each blocks one example, none
    are prerequisites for the others.
+
+## ROS-parity sweep additions (full conceptual audit, 2026-07-13)
+Tier 1 — frame in the whitepaper NOW, contract-tier at/before 1.0:
+- ACTIONS primitive: long-running goals w/ feedback + cancel (bus tier;
+  trajectory contract is a special case). Every real robot needs cancel.
+- TF / transform tree: named coordinate frames, static+dynamic transforms,
+  time-aware queries (world→base→head→camera). Prereq for vision↔motion.
+- Robot description (URDF analog): geometry/kinematics/joint limits beside
+  topology.yaml's controllers+capabilities. Prereq for sim/viz/planning.
+Tier 2 — operational muscle:
+- Bag record/replay (unify JP01 blackbox + Atropos lineage → `jaeger bag`;
+  doubles as Jaeger Train data capture).
+- Multi-machine node discovery (or explicitly: topology-declared by design —
+  the whitepaper must choose and say so).
+- REAL-TIME FRAMING (doc, not code): hard real-time = MCU firmware tier;
+  framework = command/supervision tier. True today; must be stated.
+Partial: dynamic per-node parameter reconfigure semantics; 3D robot-state
+viz (Studio's RViz-shaped job).
