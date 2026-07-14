@@ -44,6 +44,36 @@ building:
 A simulator is a body made of math — same capability names as a real
 body, so you teach in sim and deploy real with no code-path changes.
 
+## The three repo shapes
+
+This template scaffolds two of these; the third is documented here so
+you pick the right home for new work even when this repo isn't it.
+
+- **Module repo** — one swappable engine capability (`module.yaml` +
+  `config.py` + `node.py` + tests), consumed by MANY projects through a
+  **slot**. This template's `{{package_name}}/` directory is this shape.
+  Reach for it when you're building something reusable across more than
+  one project — a TTS/STT engine, a messaging bridge, a media backend.
+- **Workspace repo** — a project that owns ONE Body's bringup:
+  `topology.yaml` (capabilities + safety), `manifest.toml` (the node
+  graph), `unit.yaml` (this unit's identity + live-verified gate), and
+  `bringup/boot.py`. This template's `workspace/` directory is this
+  shape, mirroring JaegerOS's own reference hardware package
+  (`jaeger_os/hardware/packages/jp01/`). Reach for it when you're
+  standing up a robot, a rig, or any other physical/simulated body —
+  even a one-off, never reused by another project.
+- **Suite app** — a project that owns a Mind-facing product surface
+  (chat window, tray, voice), assembling JaegerOS + Jaeger AI + whichever
+  modules it needs. The `jaeger.toml` / `jaeger.windowed.toml` manifest
+  shapes in Jaeger-AI are the reference. **(planned)** — this template
+  doesn't scaffold this shape yet; start from Jaeger-AI itself and pin
+  forward rather than improvising one from a module or workspace repo.
+
+A repo can need more than one shape as it grows (a workspace that later
+extracts a reusable module), but start from whichever shape matches
+today's actual need — don't scaffold a module repo for a one-off body,
+and don't scaffold a workspace for something meant to be reused.
+
 ## Versioning & pinning
 
 - Projects and modules **pin** a JaegerOS release range

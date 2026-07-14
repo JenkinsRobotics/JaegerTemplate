@@ -27,6 +27,9 @@
 > - [ ] Enable GitHub Pages from `docs/` (see `docs/SITE.md`)
 > - [ ] Pick a LICENSE (Apache-2.0 shipped by default — swap if this repo
 >       needs different terms)
+> - [ ] Building a project (a robot, a rig) instead of a module? Use
+>       [`workspace/`](workspace/) instead of `{{package_name}}/` — see
+>       [`workspace/README.md`](workspace/README.md) for its own checklist
 
 ---
 
@@ -39,17 +42,34 @@ safety · contract · capability layer). This repo doesn't fork or edit
 JaegerOS; it **pins** a release and builds on top of it, the same way a
 ROS package builds on ROS.
 
-Depending on what you're building here, this repo is one of:
+This template scaffolds three different repo shapes. Pick the one that
+matches what you're building — see [`CONVENTIONS.md`](CONVENTIONS.md)
+for the full picture and when to reach for each:
 
-- **An engine module** — a self-contained capability (`module.yaml` +
-  `config.py` + `node.py` + tests) that plugs into any JaegerOS project
-  through a **slot** (see [`jaeger_os/nodes/kokoro_tts/`](https://github.com/JenkinsRobotics/JaegerOS/tree/master/jaeger_os/nodes/kokoro_tts)
-  for the canonical shape this template mirrors).
-- **A hardware package** — a body's capability surface (motors, lights,
-  vision, …), registered through the capability layer.
-- **A project** — an assembled thing (a robot, an app, a desktop
-  companion) that pulls in JaegerOS + whichever modules it needs and owns
-  its own bringup (topology, config, instance).
+- **Module repo** (the `{{package_name}}/` directory at this repo's
+  root) — a self-contained capability (`module.yaml` + `config.py` +
+  `node.py` + tests) that plugs into **any** JaegerOS project through a
+  **slot** (see [`jaeger_os/nodes/kokoro_tts/`](https://github.com/JenkinsRobotics/JaegerOS/tree/master/jaeger_os/nodes/kokoro_tts)
+  for the canonical shape this mirrors). Use this when you're building
+  one swappable engine (a TTS backend, an STT backend, …) meant to be
+  used by many different projects.
+- **Workspace repo** (the [`workspace/`](workspace/) directory) — a
+  project that owns a **Body's bringup**: `topology.yaml` (controllers,
+  capabilities, e-stop scope), `manifest.toml` (the node graph that
+  actually boots), `unit.yaml` (this physical/simulated unit's identity
+  + live-verified gate), and `bringup/boot.py` (links → adapters →
+  e-stop → capabilities → runtime). Mirrors JaegerOS's own reference
+  hardware package, `jaeger_os/hardware/packages/jp01/`. Use this when
+  you're standing up a robot, a rig, or any other physical/simulated
+  body — see [`workspace/README.md`](workspace/README.md) to start.
+- **Suite app** — a project that owns a **Mind-facing product**: its
+  own faces (chat window, tray, voice), assembling JaegerOS + Jaeger AI
+  + whichever modules it needs (the `jaeger.toml` / `jaeger.windowed.toml`
+  manifest shapes in [Jaeger-AI](https://github.com/JenkinsRobotics/Jaeger-AI)
+  are the reference). Use this when you're building an agentic product
+  surface rather than a hardware bringup. **(planned)** — this template
+  doesn't scaffold a suite-app skeleton yet; start from Jaeger-AI itself
+  and pin forward rather than improvising one from this repo.
 
 See [`CONVENTIONS.md`](CONVENTIONS.md) for the rules every repo in the
 ecosystem follows, and the tier map in
@@ -107,6 +127,31 @@ in JaegerOS itself:
 One copy of every truth: the manifest (`module.yaml`) is the single
 source for what this module consumes, produces, and requires — nothing
 else in the repo should restate it.
+
+## Workspace layout
+
+The project-tier shape — a repo that brings up a Body (or any project
+that owns its own bringup), mirroring JaegerOS's own reference hardware
+package (`jaeger_os/hardware/packages/jp01/`):
+
+```
+workspace/
+├── README.md                  ← what a workspace repo is, and why these files
+├── topology.yaml.example      ← controllers, capabilities, safety — the
+│                                 Body's capability declaration
+├── manifest.toml.example      ← [[node]] graph: engine modules bind by
+│                                 slot=, the hardware package binds by factory
+├── unit.yaml.example          ← this unit's identity + live-verified gate
+├── requirements.txt.example   ← the pinned-stack pattern (JaegerOS +
+│                                 modules @ tag)
+├── bringup/
+│   └── boot.py.example         ← links → adapters → e-stop → capabilities
+│                                  → runtime
+└── SAFETY_CHECKLIST.md        ← walk before any live (non-simulated) run
+```
+
+Start at [`workspace/README.md`](workspace/README.md) if this repo is a
+workspace rather than a module — it has its own replace-these checklist.
 
 ## Development
 
