@@ -100,3 +100,5 @@ Studio (or any other tool) may author and hand over a workspace bundle,
 but this repo runs it — the slicer/printer split ("Studio authors, JROS
 runs") applies here too: this directory has zero dependency on anything
 outside JaegerOS + its own pinned modules.
+
+Also standard: `local_modules/` (project-unique modules — see its README; promotion path to marketplace) and `content/` (scenes/assets — data, not code).
