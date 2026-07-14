@@ -152,3 +152,7 @@ Tier 2 — operational muscle:
   framework = command/supervision tier. True today; must be stated.
 Partial: dynamic per-node parameter reconfigure semantics; 3D robot-state
 viz (Studio's RViz-shaped job).
+- TAG REGISTRY / introspection (operator, 2026-07-14): live bus catalog
+  (topic→type/publisher/rate/last-value) + `jaeger topics` CLI + protocol
+  catalog frames — the Grafana/FANUC bind-anything property; prereq for
+  the GUI-builder Suite app. Cheap: one bus = free catalog point.
