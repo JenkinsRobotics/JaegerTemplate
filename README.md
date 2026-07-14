@@ -73,7 +73,15 @@ for the full picture and when to reach for each:
 
 See [`CONVENTIONS.md`](CONVENTIONS.md) for the rules every repo in the
 ecosystem follows, and the tier map in
-[Ecosystem links](#ecosystem-links).
+[Ecosystem links](#ecosystem-links). For the formal version of that
+tier map — five compositional roles (NODE, MODULE,
+PACKAGE/WORKSPACE, APP, DISTRIBUTION), a ROS comparison, and
+marketplace tagging — see [`TAXONOMY.md`](TAXONOMY.md). See
+[`examples/`](examples/README.md) for six worked concept mappings
+(a bare TTS module, a chatbot, JP01's own head, a lidar+SLAM demo, a
+six-axis arm, and JP01 itself) that exercise the taxonomy against
+real and archetypal apps, honest about what already exists versus
+what still needs building.
 
 ## Install
 
